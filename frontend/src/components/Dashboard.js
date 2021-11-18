@@ -26,7 +26,7 @@ function Dashboard() {
 
 
     useEffect(() => {
-        const socket = io("http://localhost:5000");
+        const socket = io("https://mern-cricket-dashboard.herokuapp.com/");
         // to connect with locally running Socker.io server
 
         socket.on('connect', function () {
