@@ -26,9 +26,14 @@ function Dashboard() {
 
 
     useEffect(() => {
+<<<<<<< HEAD
         // const socket = io("https://mern-cricket-dashboard.herokuapp.com");
         const socket = io(baseurl);
+=======
+//         const socket = io("https://mern-cricket-dashboard.herokuapp.com");
+>>>>>>> dd3aea3ae000f79593a7c7deb8c3a17f94717485
         // to connect with locally running Socker.io server
+         const socket = io(`${baseurl}`);
 
         socket.on('connect', function () {
             console.log("connected to server")
