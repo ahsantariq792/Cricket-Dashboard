@@ -35,11 +35,12 @@ mongoose.connect("mongodb+srv://ahsan:1234@scoreboard.8iivc.mongodb.net/myFirstD
 
 
 const Score = mongoose.model('Score', {
-    inning: Number,
+    format: String,
     runs: Number,
     overs: Number,
     teamA: String,
     teamB: String,
+    battingteam: String,
     wicket: Number,
     batsmanA: String,
     batsmanB: String,
@@ -70,11 +71,12 @@ const Score = mongoose.model('Score', {
 
 app.post("/api/v1/post", (req, res) => {
     const newScore = new Score({
-        inning: req.body.inning,
+        format: req.body.format,
         runs: req.body.runs,
         overs: req.body.overs,
         teamA: req.body.teamA,
         teamB: req.body.teamB,
+        battingteam: req.body.battingteam,
         wicket: req.body.wicket,
         batsmanA: req.body.batsmanA,
         batsmanB: req.body.batsmanB,
@@ -97,11 +99,12 @@ app.post("/api/v1/post", (req, res) => {
         console.log("Score created");
 
         io.emit("POSTS", {
-            inning: req.body.inning,
+            format: req.body.format,
             runs: req.body.runs,
             overs: req.body.overs,
             teamA: req.body.teamA,
             teamB: req.body.teamB,
+            battingteam: req.body.battingteam,
             wicket: req.body.wicket,
             batsmanA: req.body.batsmanA,
             batsmanB: req.body.batsmanB,
@@ -128,14 +131,22 @@ app.post("/api/v1/post", (req, res) => {
 
 
 app.get("/api/v1/post", (req, res) => {
-    // const page = Number(req.query.page);
 
     Score.find()
         .sort({ created: "desc" })
-        // .skip(page)
         .limit(1)
         .then(admdata => res.json(admdata))
         .catch(err => res.status(400).json('Error: ' + err));
+});
+
+app.get("/api/v1/score", (req, res) => {
+    // const page = Number(req.query.page);
+
+    Score.findOne({})
+        .sort({ _id: "desc" })
+        .exec(function (err, data) {
+            res.send(data);
+        });
 });
 
 

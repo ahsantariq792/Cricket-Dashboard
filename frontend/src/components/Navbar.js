@@ -18,9 +18,13 @@ function Navigation() {
                             <li>
                                 <Link to="/" className="nav-itms">Dashboard</Link>
                             </li>
-
+{/* 
                             <li>
                                 <Link to="/control" className="nav-itms">Control</Link>
+                            </li> */}
+
+                            <li>
+                                <Link to="/admin" className="nav-itms">admin</Link>
                             </li>
 
                         </Nav>

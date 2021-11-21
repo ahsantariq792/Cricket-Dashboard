@@ -2,6 +2,7 @@ import './App.css';
 import Dashboard from './components/Dashboard';
 import Control from './components/Control';
 import Navigation from './components/Navbar';
+import Admin from './components/Admin';
 
 import {
   BrowserRouter as Router,
@@ -21,8 +22,12 @@ function App() {
               <Dashboard/>
           </Route>
 
-          <Route path="/control">
+          {/* <Route path="/control">
               <Control/>
+          </Route> */}
+
+          <Route path="/admin">
+              <Admin/>
           </Route>
 
         </Switch>

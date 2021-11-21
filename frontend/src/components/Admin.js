@@ -1,34 +1,20 @@
 import '../App.css';
 import React, { useEffect, useState } from 'react';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
 import Button from "@mui/material/Button";
 import { TextField } from '@mui/material';
 import axios from 'axios';
 import { baseurl } from '../core';
 
 
-
-const validationSchema = yup.object({
-    post: yup
-        .string('Enter your password')
-        .min(2, 'Name should be of minimum 4 characters length')
-        .required('Name is required'),
-
-});
-
-
-
-
-
-function Control() {
+function Admin() {
 
     const [score, setScore] = useState({
-        post: "",
+        format: "",
         runs: "",
         overs: "",
         teamA: "",
         teamB: "",
+        battingteam:"",
         wicket: "",
         batsmanA: "",
         batsmanB: "",
@@ -59,44 +45,10 @@ function Control() {
     }, [])
 
 
-
-    const submit = (values) => {
-
-        console.log("values", values)
-
-        axios.post(`${baseurl}/api/v1/post`,
-            {
-                post: values.post,
-                runs: values.runs,
-                overs: values.overs,
-                teamA: values.teamA,
-                teamB: values.teamB,
-                wicket: values.wicket,
-                batsmanA: values.batsmanA,
-                batsmanB: values.batsmanB,
-                batsmanAruns: values.batsmanAruns,
-                batsmanBruns: values.batsmanBruns,
-                batsmanAballs: values.batsmanAballs,
-                batsmanBballs: values.batsmanBballs,
-                bowlerA: values.bowlerA,
-                bowlerB: values.bowlerB,
-                bowlerAruns: values.bowlerAruns,
-                bowlerBruns: values.bowlerBruns,
-                bowlerAover: values.bowlerAover,
-                bowlerBover: values.bowlerBover,
-                bowlerAwickets: values.bowlerAwickets,
-                bowlerBwickets: values.bowlerBwickets,
-                target: values.target,
-                runrate: values.runrate,
-            }
-        )
-
-
-            .then(res => {
-                console.log("postdata", res.data);
-                setScore(res.data)
-
-
+    const submit = () => {
+        axios.post(`${baseurl}/api/v1/post`, score)
+            .then((res) => {
+                console.log("res: ", res.data);
             })
     }
 
@@ -107,48 +59,13 @@ function Control() {
 
 
 
-
-
-    const formik = useFormik({
-        validationSchema: validationSchema,
-        initialValues: {
-            post: '',
-            runs: score.runs,
-            overs: score.overs,
-            wicket: '',
-            teamA: score.teamA,
-            teamB: '',
-            batsmanA: '',
-            batsmanB: '',
-            batsmanAruns: '',
-            batsmanBruns: '',
-            batsmanAballs: '',
-            batsmanBballs: '',
-            bowlerA: '',
-            bowlerB: '',
-            bowlerAruns: '',
-            bowlerBruns: '',
-            bowlerAover: '',
-            bowlerBover: '',
-            bowlerAwickets: '',
-            bowlerBwickets: '',
-            target: '',
-            runrate: '',
-
-        },
-        onSubmit: submit
-    },
-    );
-
     return (
         <>
             <div className="app-main">
                 <div className="post-main">
 
-                    <form id="post-form" onSubmit={formik.handleSubmit}>
-
+                    <form id="post-form" onSubmit={submit}>
                         <h3 className="side"> Score Control Panel</h3>
-                        <h1>{score.teamA}</h1>
 
                         <div className="teamcontrol">
 
@@ -159,20 +76,15 @@ function Control() {
                                 type="text"
                                 className="box"
                                 id="team"
+                                variant="outlined"
 
                                 value={score.teamA}
-                                // onChange={formik.handleChange}
                                 onChange={(e) => {
                                     setScore((prev) => {
                                         return { ...prev, teamA: e.target.value }
                                     })
                                 }}
-
-
-                                error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                helperText={formik.touched.caption && formik.errors.caption}
-
-                                variant="outlined" />
+                            />
 
                             <TextField
                                 id="outlined-basic"
@@ -182,12 +94,30 @@ function Control() {
                                 className="box"
                                 id="team"
 
-                                value={formik.values.teamB}
-                                onChange={formik.handleChange}
+                                value={score.teamB}
+                                onChange={(e) => {
+                                    setScore((prev) => {
+                                        return { ...prev, teamB: e.target.value }
+                                    })
+                                }}
+
+                                variant="outlined" />
 
 
-                                error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                helperText={formik.touched.caption && formik.errors.caption}
+                            <TextField
+                                id="outlined-basic"
+                                name="battingteam"
+                                label="battingteam"
+                                type="text"
+                                className="box"
+                                id="team"
+
+                                value={score.battingteam}
+                                onChange={(e) => {
+                                    setScore((prev) => {
+                                        return { ...prev, battingteam: e.target.value }
+                                    })
+                                }}
 
                                 variant="outlined" />
 
@@ -206,18 +136,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    // value={score.post}
-                                    // onChange={(e) => {
-                                    //     setScore((prev) => {
-                                    //         return { ...prev, post: e.target.value }
-                                    //     })
-                                    // }}
-                                    value={formik.values.post}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.format}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, format: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -229,12 +153,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.runs}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.runs}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, runs: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -247,12 +171,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.wicket}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.wicket}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, wicket: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -264,12 +188,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.batsmanA}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.batsmanA}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, batsmanA: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -281,13 +205,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.batsmanAruns}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
-
+                                    value={score.batsmanAruns}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, batsmanAruns: e.target.value }
+                                        })
+                                    }}
                                     variant="outlined" />
 
                                 <TextField
@@ -298,13 +221,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.batsmanAballs}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
-
+                                    value={score.batsmanAballs}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, batsmanAballs: e.target.value }
+                                        })
+                                    }}
                                     variant="outlined" />
 
                                 <TextField
@@ -315,12 +237,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.batsmanB}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.batsmanB}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, batsmanB: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -334,12 +256,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.batsmanBruns}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.batsmanBruns}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, batsmanBruns: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -353,12 +275,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.batsmanBballs}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.batsmanBballs}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, batsmanBballs: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -370,12 +292,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.runrate}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.runrate}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, runrate: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -395,12 +317,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.overs}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.overs}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, overs: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -412,12 +334,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.target}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.target}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, target: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -430,12 +352,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.bowlerA}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.bowlerA}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, bowlerA: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -449,12 +371,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.bowlerAruns}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.bowlerAruns}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, bowlerAruns: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -467,12 +389,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.bowlerAwickets}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.bowlerAwickets}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, bowlerAwickets: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -484,12 +406,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.bowlerAover}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.bowlerAover}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, bowlerAover: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -501,13 +423,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.bowlerB}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
-
+                                    value={score.bowlerB}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, bowlerB: e.target.value }
+                                        })
+                                    }}
                                     variant="outlined" />
 
                                 <TextField
@@ -518,13 +439,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.bowlerBruns}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
-
+                                    value={score.bowlerBruns}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, bowlerBruns: e.target.value }
+                                        })
+                                    }}
                                     variant="outlined" />
 
 
@@ -536,12 +456,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.bowlerBwickets}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.bowlerBwickets}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, bowlerBwickets: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -555,12 +475,12 @@ function Control() {
                                     className="box"
                                     id="postbox"
 
-                                    value={formik.values.bowlerBover}
-                                    onChange={formik.handleChange}
-
-
-                                    error={formik.touched.caption && Boolean(formik.errors.caption)}
-                                    helperText={formik.touched.caption && formik.errors.caption}
+                                    value={score.bowlerBover}
+                                    onChange={(e) => {
+                                        setScore((prev) => {
+                                            return { ...prev, bowlerBover: e.target.value }
+                                        })
+                                    }}
 
                                     variant="outlined" />
 
@@ -582,5 +502,5 @@ function Control() {
     );
 }
 
-export default Control;
+export default Admin;
 

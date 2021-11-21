@@ -1,7 +1,8 @@
 // import '../../App.css';
 import React, { useEffect, useState } from 'react';
 // import { useHistory } from "react-router-dom";
-
+import Bat from '../images/bat.png'
+import Ball from '../images/ball.png'
 import axios from 'axios';
 import { baseurl } from '../core';
 import io from 'socket.io-client';
@@ -20,6 +21,7 @@ function Dashboard() {
             .then(response => {
                 console.log(response.data)
                 setPosts(response.data)
+                console.log(posts)
             })
             .catch(err => alert("Error in getting data"))
     }, [])
@@ -29,7 +31,7 @@ function Dashboard() {
 
         // const socket = io("https://mern-cricket-dashboard.herokuapp.com");
         // to connect with locally running Socker.io server
-         const socket = io(baseurl);
+        const socket = io(baseurl);
 
         socket.on('connect', function () {
             console.log("connected to server")
@@ -61,31 +63,37 @@ function Dashboard() {
                 <div className="main">
                     {posts?.map((posts, index) => (
                         <>
-                            <h3 id="title">{posts.teamA} Vs {posts.teamB}</h3>
-                            <img className="loading" src={loading} />
-                            <div className="dashboard">
-                                <div className="battingside">
-
-                                    <h3 className="team">{posts.teamA}</h3>
-                                    <h4><span>{posts.runs}</span>/<span>{posts.wicket}</span></h4>
-                                    <h4><span>{posts.batsmanA} </span><span>{posts.batsmanAruns}</span> <span>({posts.batsmanAballs})</span></h4>
-                                    <h4><span>{posts.batsmanB} </span><span>{posts.batsmanBruns}</span> <span>({posts.batsmanBballs})</span></h4>
-                                    <h4 className="runrate">Run rate <span>{posts.runrate}</span></h4>
-
+                            <div className="dash-main">
+                                <div className="details">
+                                    <h3 id="title">{posts.teamA} Vs {posts.teamB}</h3>
+                                    <h6 className="battingteam">format: {posts.format}</h6>
+                                    <h6 className="battingteam">Batting team: {posts.battingteam}</h6>
                                 </div>
+                                <img className="loading" src={loading} />
+
+                                <div className="dashboard">
+                                    <div className="battingside">
+                                        <h3 className="team">{posts.teamA}</h3>
+                                        <h4><span><img className="batimg" src={Bat} /></span><span>Runs: {posts.runs}</span>/<span>{posts.wicket}</span></h4>
+                                        <h4><span>{posts.batsmanA} </span><span>{posts.batsmanAruns}</span> <span>({posts.batsmanAballs})</span></h4>
+                                        <h4><span>{posts.batsmanB} </span><span>{posts.batsmanBruns}</span> <span>({posts.batsmanBballs})</span></h4>
+                                        <h4 className="runrate">Run rate <span>{posts.runrate}</span></h4>
+
+                                    </div>
 
 
 
-                                <div className="bowlingside">
+                                    <div className="bowlingside">
 
-                                    <h3 className="team">{posts.teamB}</h3>
-                                    <h4>Overs <span>{posts.wicket}</span></h4>
+                                        <h3 className="team">{posts.teamB}</h3>
+                                        <h4><span><img className="ballimg" src={Ball} /></span> <span>Over:{posts.overs}</span></h4>
 
-                                    <h4><span>{posts.bowlerA} </span><span>{posts.bowlerAover}</span> <span>({posts.bowlerAruns}</span>/<span>{posts.bowlerAwickets})</span></h4>
-                                    <h4><span>{posts.bowlerB} </span><span>{posts.bowlerBover}</span> <span>({posts.bowlerBruns}</span>/<span>{posts.bowlerAwickets})</span></h4>
-                                    <h4 className="target">Target <span>{posts.target}</span></h4>
+                                        <h4><span>{posts.bowlerA} </span><span>{posts.bowlerAover}</span> <span>({posts.bowlerAruns}</span>/<span>{posts.bowlerAwickets})</span></h4>
+                                        <h4><span>{posts.bowlerB} </span><span>{posts.bowlerBover}</span> <span>({posts.bowlerBruns}</span>/<span>{posts.bowlerAwickets})</span></h4>
+                                        <h4 className="target">Target <span>{posts.target}</span></h4>
 
 
+                                    </div>
                                 </div>
                             </div>
                         </>
